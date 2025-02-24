@@ -1,3 +1,5 @@
+import time
+
 import allure
 import pytest
 
@@ -8,12 +10,10 @@ from pages.order_page import OrderPage, COLOR
 from pages.top_menu import TopMenu
 
 @allure.title("Страница Заказать открывается с главной страницы")
-def test_order_page_opens_from_main_page(driver):
-    main_page = MainPage(driver)
+def test_order_page_opens_from_main_page(main_page):
     main_page.open_main_page()
-    order_page = OrderPage(driver)
-    order_page.order_page_is_load()
-    assert "order" in driver.current_url
+    time.sleep(2)
+    assert "order" in main_page.current_url
 
 @allure.title("Создаем заказ с разными параметрами и нажимаем нижнею кнопку заказать")
 @pytest.mark.parametrize('name, surname, address, phone, plus_days, rent_days, color, comment',
@@ -23,9 +23,8 @@ def test_order_page_opens_from_main_page(driver):
                              (Rh.get_name(), Rh.get_surname(), Rh.get_address(), "+89761234567", 3, 7, COLOR.Black,
                               "Информация для курьера")
                          ])
-def test_create_order_by_clicking_bottom_button(driver, name, surname, address, phone, plus_days, rent_days, color,
+def test_create_order_by_clicking_bottom_button(order_page, name, surname, address, phone, plus_days, rent_days, color,
                                                 comment):
-    order_page = OrderPage(driver)
     order_page.fill_first_page_of_order_form(name, surname, address, phone)
     order_page.click_continue_order_button()
     order_page.fill_second_page_of_order_form(plus_days, rent_days, color, comment)
@@ -34,8 +33,7 @@ def test_create_order_by_clicking_bottom_button(driver, name, surname, address, 
     assert order_id > 0
 
 @allure.title("Создаем заказ и нажимаем верхнею кнопку Заказать")
-def test_create_order_by_clicking_top_order_button(driver):
-    order_page = OrderPage(driver)
+def test_create_order_by_clicking_top_order_button(order_page):
     order_page.fill_first_page_of_order_form(Rh.get_name(), Rh.get_surname(), Rh.get_address(), Rh.get_phone())
     order_page.click_continue_order_button()
     order_page.fill_second_page_of_order_form(7, 3, COLOR.Black,"Информация' для курьера")

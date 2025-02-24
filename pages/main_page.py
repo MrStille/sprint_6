@@ -15,7 +15,7 @@ class MainPage:
     @allure.step('Открываем главную страницу')
     def open_main_page(self):
         self.driver.get(Data.SITE_URL)
-        DriverHelper.wait_element_visible(self.driver, TopMenuLocators.SITE_LOGO)
+        DriverHelper.wait_element_visible(self.driver, TopMenuLocators.SITE_LOGO).click()
 
     @allure.step('Скролим к вопросам')
     def scroll_to_questions(self):
